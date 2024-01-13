@@ -4,7 +4,7 @@ namespace KazuMIDIPlayer
 {
     internal class FPSCounter
     {
-        private Stopwatch stopwatch;
+        private readonly Stopwatch stopwatch;
         private int frameCount;
         private double lastFPS;
 

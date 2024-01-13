@@ -46,7 +46,7 @@
             // StatusStrip
             // 
             StatusStrip.Items.AddRange(new ToolStripItem[] { StatusStrip_PlaybackStatusLabel });
-            StatusStrip.Location = new Point(0, 359);
+            StatusStrip.Location = new Point(0, 379);
             StatusStrip.Name = "StatusStrip";
             StatusStrip.Size = new Size(624, 22);
             StatusStrip.SizingGrip = false;
@@ -100,7 +100,7 @@
             // 
             ControlPanel.Controls.Add(PlayPauseCheckBox);
             ControlPanel.Dock = DockStyle.Bottom;
-            ControlPanel.Location = new Point(0, 328);
+            ControlPanel.Location = new Point(0, 348);
             ControlPanel.Name = "ControlPanel";
             ControlPanel.Size = new Size(624, 31);
             ControlPanel.TabIndex = 4;
@@ -124,7 +124,7 @@
             GraphicPanel.Dock = DockStyle.Fill;
             GraphicPanel.Location = new Point(0, 24);
             GraphicPanel.Name = "GraphicPanel";
-            GraphicPanel.Size = new Size(624, 304);
+            GraphicPanel.Size = new Size(624, 324);
             GraphicPanel.TabIndex = 10;
             GraphicPanel.Paint += GraphicPanel_Paint;
             GraphicPanel.MouseDown += GraphicPanel_MouseDown;
@@ -136,7 +136,7 @@
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(624, 381);
+            ClientSize = new Size(624, 401);
             Controls.Add(GraphicPanel);
             Controls.Add(ControlPanel);
             Controls.Add(StatusStrip);

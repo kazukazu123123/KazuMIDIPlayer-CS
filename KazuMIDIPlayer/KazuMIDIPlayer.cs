@@ -91,8 +91,7 @@ namespace KazuMIDIPlayer
         public KazuMIDIPlayer()
         {
             InitializeComponent();
-            graphicUpdateTimer = new System.Threading.Timer(GraphicUpdateTimerCallback, null, 0, 1000 / 60); // 60 FPS
-
+            graphicUpdateTimer = new System.Threading.Timer(GraphicUpdateTimerCallback, null, 0, 1000 / 60);
         }
 
         private void KazuMIDIPlayer_Load(object sender, EventArgs e)
@@ -142,7 +141,7 @@ namespace KazuMIDIPlayer
             PlayPauseCheckBox.Enabled = false;
 
             // statusWindow
-            Window statusWindow = windowManager.NewWindow("Status", 20, 20, 160, 85);
+            Window statusWindow = windowManager.NewWindow("Status", 10, 10, 160, 80);
 
             statusWindow.DrawGraphicsEvent += (g, x, y, w, h) =>
             {
@@ -214,7 +213,7 @@ namespace KazuMIDIPlayer
             };
 
             // keyboardWindow
-            Window keyboardWindow = windowManager.NewWindow("Piano Keyboard", 20, 130, pianoKeyboard_whiteKeyWidth * 75 + 1, pianoKeyboard_whiteKeyHeight + 1); // + 1 for the outlines
+            Window keyboardWindow = windowManager.NewWindow("Piano Keyboard", 10, 240, pianoKeyboard_whiteKeyWidth * 75 + 1, pianoKeyboard_whiteKeyHeight + 1); // + 1 for the outlines
 
             keyboardWindow.DrawGraphicsEvent += (g, x, y, w, h) =>
             {
@@ -292,7 +291,7 @@ namespace KazuMIDIPlayer
             };
 
             // keyboardChanenlWindow
-            Window keyboardChanenlWindow = windowManager.NewWindow("Piano Keyboard Channel", 120, 20, pianoKeyboardChannel_whiteKeyWidth * 75 + 1, 16 * pianoKeyboardChannel_whiteKeyHeight + 1); // + 1 for the outlines
+            Window keyboardChanenlWindow = windowManager.NewWindow("Piano Keyboard Channel", 140, 10, pianoKeyboardChannel_whiteKeyWidth * 75 + 1, 16 * pianoKeyboardChannel_whiteKeyHeight + 1); // + 1 for the outlines
             keyboardChanenlWindow.DrawGraphicsEvent += (g, x, y, w, h) =>
             {
                 Pen pianoKeyboardBorderPen = new(Color.FromArgb(160, 160, 160));
