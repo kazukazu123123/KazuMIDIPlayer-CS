@@ -27,7 +27,6 @@ namespace KazuMIDIPlayer
         private static readonly object pianoKeyboardArray_lockObj = new();
         private static readonly object pianoKeyboardChannelArray_lockObj = new();
 
-        private readonly System.Timers.Timer graphicUpdateTimer = new();
         private readonly Color[] channelColorMap =
         [
             Color.FromArgb(51, 102, 255),
@@ -90,6 +89,13 @@ namespace KazuMIDIPlayer
         public KazuMIDIPlayer()
         {
             InitializeComponent();
+            Application.Idle += Application_Idle; ;
+
+        }
+
+        private void Application_Idle(object? sender, EventArgs e)
+        {
+            GraphicPanel.Invalidate();
         }
 
         private void KazuMIDIPlayer_Load(object sender, EventArgs e)
@@ -124,10 +130,6 @@ namespace KazuMIDIPlayer
             midiPlayer.OnMIDIEvent += MidiPlayer_OnMIDIEvent;
             midiPlayer.OnTickEvent += MidiPlayer_OnTickEvent;
             midiPlayer.OnPlaybackStateChangeEvent += MidiPlayer_OnPlaybackStateChangeEvent;
-
-            graphicUpdateTimer.Interval = 1000 / 60;
-            graphicUpdateTimer.Elapsed += GraphicUpdateTimer_Elapsed;
-            graphicUpdateTimer.Start();
 
             if (!Properties.Settings.Default.firstLaunch)
             {
@@ -390,11 +392,6 @@ namespace KazuMIDIPlayer
             windowManager.DrawWindow(g);
         }
 
-        private void GraphicUpdateTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
-        {
-            GraphicPanel.Invalidate();
-        }
-
         private void MidiPlayer_OnLoadingEvent(object? sender, EventArgs e)
         {
             //throw new NotImplementedException();
@@ -606,7 +603,6 @@ namespace KazuMIDIPlayer
         private void KazuMIDIPlayer_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
-            graphicUpdateTimer.Stop();
             Properties.Settings.Default.firstLaunch = false;
             if (WindowState == FormWindowState.Normal)
             {
