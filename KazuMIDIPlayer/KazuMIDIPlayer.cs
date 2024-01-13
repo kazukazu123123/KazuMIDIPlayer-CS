@@ -288,7 +288,6 @@ namespace KazuMIDIPlayer
             keyboardChanenlWindow.DrawGraphicsEvent += (g, x, y, w, h) =>
             {
                 Pen pianoKeyboardBorderPen = new(Color.FromArgb(160, 160, 160));
-                //Color pianoKeyboardColor = Color.FromArgb(65, 105, 225);
 
                 for (int row = 0; row < 16; row++)
                 {
