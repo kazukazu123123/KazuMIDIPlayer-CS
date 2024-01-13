@@ -27,6 +27,8 @@ namespace KazuMIDIPlayer
         private static readonly object pianoKeyboardArray_lockObj = new();
         private static readonly object pianoKeyboardChannelArray_lockObj = new();
 
+        private static readonly FPSCounter fpsCounter = new();
+        private readonly System.Threading.Timer? graphicUpdateTimer;
         private readonly Color[] channelColorMap =
         [
             Color.FromArgb(51, 102, 255),
@@ -89,13 +91,8 @@ namespace KazuMIDIPlayer
         public KazuMIDIPlayer()
         {
             InitializeComponent();
-            Application.Idle += Application_Idle; ;
+            graphicUpdateTimer = new System.Threading.Timer(GraphicUpdateTimerCallback, null, 0, 1000 / 60); // 60 FPS
 
-        }
-
-        private void Application_Idle(object? sender, EventArgs e)
-        {
-            GraphicPanel.Invalidate();
         }
 
         private void KazuMIDIPlayer_Load(object sender, EventArgs e)
@@ -122,6 +119,9 @@ namespace KazuMIDIPlayer
                 new object[] { true }
             );
 
+
+            fpsCounter.Start();
+
             Properties.Settings.Default.SettingChanging += Default_SettingChanging;
 
             midiPlayer.OnLoadingEvent += MidiPlayer_OnLoadingEvent;
@@ -142,7 +142,7 @@ namespace KazuMIDIPlayer
             PlayPauseCheckBox.Enabled = false;
 
             // statusWindow
-            Window statusWindow = windowManager.NewWindow("Status", 20, 20, 160, 65);
+            Window statusWindow = windowManager.NewWindow("Status", 20, 20, 160, 85);
 
             statusWindow.DrawGraphicsEvent += (g, x, y, w, h) =>
             {
@@ -161,6 +161,8 @@ namespace KazuMIDIPlayer
                 string tickString = $"Tick: {currentTick} / {midiPlayer.midiFile.Division}";
                 string playedNotesString = $"Played Notes: {noteCount}";
                 string polyphonyString = $"Polyphony: {polyphony} / {maxPolyphony}";
+                double currentFPS = fpsCounter.GetLastFPS();
+                string fpsString = $"FPS: {currentFPS:F4}";
 
                 SizeF? tickStringWidth = g?.MeasureString(tickString, font, 1000, sf);
                 SizeF? playedNotesStringWidth = g?.MeasureString(playedNotesString, font, 1000, sf);
@@ -182,6 +184,10 @@ namespace KazuMIDIPlayer
 
                 // Polyphony
                 g?.DrawString(polyphonyString, font, fontBrush, x + 2, y + margin + column * spacing);
+                column++;
+
+                // FPS
+                g?.DrawString(fpsString, font, fontBrush, x + 2, y + margin + column * spacing);
                 column++;
 
                 // Polyphony Progress bar
@@ -390,6 +396,12 @@ namespace KazuMIDIPlayer
 
             // Draw window
             windowManager.DrawWindow(g);
+        }
+
+        private void GraphicUpdateTimerCallback(object? state)
+        {
+            GraphicPanel.Invalidate();
+            fpsCounter.Update();
         }
 
         private void MidiPlayer_OnLoadingEvent(object? sender, EventArgs e)
