@@ -141,7 +141,7 @@ namespace KazuMIDIPlayer
             PlayPauseCheckBox.Enabled = false;
 
             // statusWindow
-            Window statusWindow = windowManager.NewWindow("Status", 10, 10, 160, 80);
+            Window statusWindow = windowManager.NewWindow("Status", 10, 10, 120, 80);
 
             statusWindow.DrawGraphicsEvent += (g, x, y, w, h) =>
             {
@@ -155,7 +155,7 @@ namespace KazuMIDIPlayer
 
                 Pen polyphonyProgressBarBorderPen = new(Color.FromArgb(51, 51, 51));
                 SolidBrush polyphonyProgressBarBackgroundBrush = new(Color.FromArgb(90, 90, 90));
-                SolidBrush polyphonyProgressBarBrush = new(Color.FromArgb(169, 206, 236));
+                SolidBrush polyphonyProgressBarBrush = new(Color.FromArgb(80, 140, 140));
 
                 string tickString = $"Tick: {currentTick} / {midiPlayer.midiFile.Division}";
                 string playedNotesString = $"Played Notes: {noteCount}";
@@ -171,7 +171,7 @@ namespace KazuMIDIPlayer
                     Math.Max(playedNotesStringWidth?.Width ?? 0,
                     polyphonyStringWidth?.Width ?? 0)) + 5; // padding
 
-                windowManager.ResizeWindow(statusWindow.Id, statusTextMaxSize, h);
+                windowManager.ResizeWindow(statusWindow.Id, Math.Max(w, statusTextMaxSize), h);
 
                 // Tick
                 g?.DrawString(tickString, font, fontBrush, x + 2, y + margin + column * spacing);
@@ -181,28 +181,27 @@ namespace KazuMIDIPlayer
                 g?.DrawString(playedNotesString, font, fontBrush, x + 2, y + margin + column * spacing);
                 column++;
 
-                // Polyphony
-                g?.DrawString(polyphonyString, font, fontBrush, x + 2, y + margin + column * spacing);
-                column++;
-
                 // FPS
                 g?.DrawString(fpsString, font, fontBrush, x + 2, y + margin + column * spacing);
                 column++;
 
                 // Polyphony Progress bar
                 // Border
-                g?.DrawRectangle(polyphonyProgressBarBorderPen, x + 2, y + margin + column * spacing, statusWindow.Rectangle.Width - 5, 10);
+                g?.DrawRectangle(polyphonyProgressBarBorderPen, x + 2, y + margin + column * spacing, statusWindow.Rectangle.Width - 5, 14);
                 // Progress bar
                 if (maxPolyphony != 0)
                 {
                     float progressRatio = (float)polyphony / maxPolyphony;
-                    g?.FillRectangle(polyphonyProgressBarBackgroundBrush, x + 3, y + margin + column * spacing + 1, statusWindow.Rectangle.Width - 6, 9);
-                    g?.FillRectangle(polyphonyProgressBarBrush, x + 3, y + margin + column * spacing + 1, progressRatio * statusWindow.Rectangle.Width - 6, 9);
+                    g?.FillRectangle(polyphonyProgressBarBackgroundBrush, x + 3, y + margin + column * spacing + 1, statusWindow.Rectangle.Width - 6, 13);
+                    g?.FillRectangle(polyphonyProgressBarBrush, x + 3, y + margin + column * spacing + 1, progressRatio * statusWindow.Rectangle.Width - 6, 13);
                 }
                 else
                 {
-                    g?.FillRectangle(polyphonyProgressBarBackgroundBrush, x + 3, y + margin + column * spacing + 1, statusWindow.Rectangle.Width - 6, 9);
+                    g?.FillRectangle(polyphonyProgressBarBackgroundBrush, x + 3, y + margin + column * spacing + 1, statusWindow.Rectangle.Width - 6, 13);
                 }
+
+                // Polyphony
+                g?.DrawString(polyphonyString, font, fontBrush, x + 3, y + margin + column * spacing + 1);
                 column++;
 
                 font.Dispose();
