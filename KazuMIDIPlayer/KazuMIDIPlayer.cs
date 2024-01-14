@@ -141,7 +141,7 @@ namespace KazuMIDIPlayer
             PlayPauseCheckBox.Enabled = false;
 
             // statusWindow
-            Window statusWindow = windowManager.NewWindow("Status", 10, 10, 120, 80);
+            Window statusWindow = windowManager.NewWindow("Status", 10, 10, 120, 70);
 
             statusWindow.DrawGraphicsEvent += (g, x, y, w, h) =>
             {
