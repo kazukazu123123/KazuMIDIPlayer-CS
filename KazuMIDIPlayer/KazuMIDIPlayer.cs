@@ -20,8 +20,6 @@ namespace KazuMIDIPlayer
         private int noteCount = 0;
         private int polyphony = 0;
         private int maxPolyphony = 0;
-        private bool useKDMAPI = false;
-        private bool KDMAPIInitialized = false;
 
         private static readonly object polyphony_lockObj = new();
         private static readonly object pianoKeyboardArray_lockObj = new();
@@ -64,6 +62,7 @@ namespace KazuMIDIPlayer
         private readonly static int pianoKeyboardChannel_blackKeyHeight = (int)(pianoKeyboardChannel_whiteKeyHeight * 0.65);
         private static int pianoKeyboardChannel_keyXPos = 0;
 
+        private readonly MIDIDevice midiDevice = new();
         private readonly MIDIPlayer midiPlayer = new();
 
         private readonly WindowManager windowManager = new();
@@ -78,14 +77,9 @@ namespace KazuMIDIPlayer
                     byte noteNumber = (byte)note;
                     byte velocity = 0;
 
-                    SendMIDIEvent(statusByte, noteNumber, velocity);
+                    midiDevice.SendMIDIEvent(statusByte, noteNumber, velocity);
                 }
             }
-        }
-
-        private void SendMIDIEvent(int status, int data1, int data2)
-        {
-            if (useKDMAPI) _ = KDMAPI.SendDirectData((uint)(status | data1 << 8 | (data2 << 16)));
         }
 
         public KazuMIDIPlayer()
@@ -101,13 +95,9 @@ namespace KazuMIDIPlayer
                 WindowState = FormWindowState.Maximized;
             }
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                && Properties.Settings.Default.useKDMAPI)
+            if (Properties.Settings.Default.midiDevice != null)
             {
-                useKDMAPI = true;
-                if (KDMAPIInitialized) KDMAPI.TerminateKDMAPIStream();
-                KDMAPI.InitializeKDMAPIStream();
-                KDMAPIInitialized = true;
+                midiDevice.SetMIDIDevice(Properties.Settings.Default.midiDevice);
             }
 
             GraphicPanel.GetType().InvokeMember(
@@ -458,7 +448,7 @@ namespace KazuMIDIPlayer
                     if (polyphony > 0) polyphony -= 1;
                 }
             }
-            SendMIDIEvent(e.Status, e.Data1, e.Data2 ?? 0);
+            midiDevice.SendMIDIEvent(e.Status, e.Data1, e.Data2 ?? 0);
         }
 
         private void MidiPlayer_OnTickEvent(object? sender, TickEventArgs e)
@@ -487,7 +477,6 @@ namespace KazuMIDIPlayer
                         PlayPauseCheckBox.Enabled = true;
                     }));
                     StopAllNotes();
-                    //if (useKDMAPI) KDMAPI.ResetKDMAPIStream(); //no
                     StatusStrip_PlaybackStatusLabel.Text = "PlaybackStatus: Paused";
                     PlayPauseCheckBox.Invoke(new System.Windows.Forms.MethodInvoker(delegate
                     {
@@ -503,7 +492,6 @@ namespace KazuMIDIPlayer
                         PlayPauseCheckBox.Enabled = false;
                     }));
                     StopAllNotes();
-                    if (useKDMAPI) KDMAPI.ResetKDMAPIStream();
                     StatusStrip_PlaybackStatusLabel.Text = "PlaybackStatus: Stopped";
                     PlayPauseCheckBox.Invoke(new System.Windows.Forms.MethodInvoker(delegate
                     {
@@ -530,17 +518,8 @@ namespace KazuMIDIPlayer
         {
             switch (e.SettingName)
             {
-                case "useKDMAPI":
-                    if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) e.Cancel = true;
-
-                    if ((bool)e.NewValue)
-                    {
-                        if (KDMAPI.InitializeKDMAPIStream()) useKDMAPI = true;
-                    }
-                    else
-                    {
-                        if (KDMAPI.TerminateKDMAPIStream()) useKDMAPI = false;
-                    }
+                case "midiDevice":
+                    midiDevice.SetMIDIDevice((string)e.NewValue);
                     break;
                 default:
                     break;

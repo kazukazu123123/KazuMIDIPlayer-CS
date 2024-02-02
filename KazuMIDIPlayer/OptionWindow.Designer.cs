@@ -30,7 +30,9 @@
         {
             tabControl = new TabControl();
             tabPage_Main = new TabPage();
-            checkBox_useKDMAPI = new CheckBox();
+            RefreshMIDIDeviceButton = new Button();
+            label_MIDIOutSelect = new Label();
+            comboBox_MIDIOutSelect = new ComboBox();
             SaveButton = new Button();
             CancelButton = new Button();
             tabControl.SuspendLayout();
@@ -48,7 +50,9 @@
             // 
             // tabPage_Main
             // 
-            tabPage_Main.Controls.Add(checkBox_useKDMAPI);
+            tabPage_Main.Controls.Add(RefreshMIDIDeviceButton);
+            tabPage_Main.Controls.Add(label_MIDIOutSelect);
+            tabPage_Main.Controls.Add(comboBox_MIDIOutSelect);
             tabPage_Main.Location = new Point(4, 24);
             tabPage_Main.Name = "tabPage_Main";
             tabPage_Main.Padding = new Padding(3);
@@ -57,15 +61,33 @@
             tabPage_Main.Text = "Main";
             tabPage_Main.UseVisualStyleBackColor = true;
             // 
-            // checkBox_useKDMAPI
+            // RefreshMIDIDeviceButton
             // 
-            checkBox_useKDMAPI.AutoSize = true;
-            checkBox_useKDMAPI.Location = new Point(6, 6);
-            checkBox_useKDMAPI.Name = "checkBox_useKDMAPI";
-            checkBox_useKDMAPI.Size = new Size(92, 19);
-            checkBox_useKDMAPI.TabIndex = 0;
-            checkBox_useKDMAPI.Text = "Use KDMAPI";
-            checkBox_useKDMAPI.UseVisualStyleBackColor = true;
+            RefreshMIDIDeviceButton.Location = new Point(316, 6);
+            RefreshMIDIDeviceButton.Name = "RefreshMIDIDeviceButton";
+            RefreshMIDIDeviceButton.Size = new Size(113, 23);
+            RefreshMIDIDeviceButton.TabIndex = 2;
+            RefreshMIDIDeviceButton.Text = "Refresh Device List";
+            RefreshMIDIDeviceButton.UseVisualStyleBackColor = true;
+            RefreshMIDIDeviceButton.Click += RefreshMIDIDeviceButton_Click;
+            // 
+            // label_MIDIOutSelect
+            // 
+            label_MIDIOutSelect.AutoSize = true;
+            label_MIDIOutSelect.Location = new Point(6, 9);
+            label_MIDIOutSelect.Name = "label_MIDIOutSelect";
+            label_MIDIOutSelect.Size = new Size(96, 15);
+            label_MIDIOutSelect.TabIndex = 1;
+            label_MIDIOutSelect.Text = "MIDI Out Device:";
+            // 
+            // comboBox_MIDIOutSelect
+            // 
+            comboBox_MIDIOutSelect.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBox_MIDIOutSelect.FormattingEnabled = true;
+            comboBox_MIDIOutSelect.Location = new Point(108, 6);
+            comboBox_MIDIOutSelect.Name = "comboBox_MIDIOutSelect";
+            comboBox_MIDIOutSelect.Size = new Size(202, 23);
+            comboBox_MIDIOutSelect.TabIndex = 0;
             // 
             // SaveButton
             // 
@@ -115,6 +137,8 @@
         private TabPage tabPage_Main;
         private Button SaveButton;
         private new Button CancelButton;
-        private CheckBox checkBox_useKDMAPI;
+        private ComboBox comboBox_MIDIOutSelect;
+        private Label label_MIDIOutSelect;
+        private Button RefreshMIDIDeviceButton;
     }
 }

@@ -72,13 +72,13 @@ namespace KazuMIDIPlayer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool useKDMAPI {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string midiDevice {
             get {
-                return ((bool)(this["useKDMAPI"]));
+                return ((string)(this["midiDevice"]));
             }
             set {
-                this["useKDMAPI"] = value;
+                this["midiDevice"] = value;
             }
         }
     }
