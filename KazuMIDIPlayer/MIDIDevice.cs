@@ -19,16 +19,29 @@ namespace KazuMIDIPlayer
 
         public void SetMIDIDevice(string midiDevice)
         {
-            if (midiDevice == null) return;
-            currentSelectedMIDIDevice = midiDevice;
+            if (midiDevice == null || currentSelectedMIDIDevice == midiDevice)
+                return;
+
+            // Disable previously selected device
             switch (currentSelectedMIDIDevice)
             {
                 case "[NONE]":
+                    break;
+                case "KDMAPI":
                     if (useKDMAPI)
                     {
                         KDMAPI.TerminateKDMAPIStream();
                         useKDMAPI = false;
                     }
+                    break;
+                default:
+                    break;
+            }
+
+            currentSelectedMIDIDevice = midiDevice;
+            switch (currentSelectedMIDIDevice)
+            {
+                case "[NONE]":
                     break;
                 case "KDMAPI":
                     if (!useKDMAPI)
@@ -41,7 +54,6 @@ namespace KazuMIDIPlayer
                     break;
             }
         }
-
         public void SendMIDIEvent(int status, int data1, int data2)
         {
             switch (currentSelectedMIDIDevice)
